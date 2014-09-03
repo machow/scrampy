@@ -20,7 +20,7 @@ def make_audio(bp, stories, audout="default.wav", bpout="default.csv"):
 
     print "----Exporting Audio----"
     audio = aud_from_log(df, **story_dict)
-    audio.export(audout)
+    audio.export(audout, format=audout.split('.')[-1])
 
     print "----Saving Blueprint For Export----"
     df['old_name'] = df['name']
