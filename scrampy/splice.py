@@ -36,17 +36,6 @@ def parse_splits(fname_or_df, outname=None):
     
     return df.reindex_axis(OUTCOLS, axis=1)
 
-def parse_old_logs(log_file, order_file, name=None):
-    df = DataFrame.from_csv(log_file, index_col=None, header=None)
-    df = df.rename(columns={0:'break'})
-    if name: df['name'] = name
-    elif not 'name' in df: raise Exception('log needs a name column')
-
-    log = parse_splits(df)
-    order = Series.from_csv('tests/data/NTF/NotTheFall_longsent_scram_order.txt', header=None, index_col=None)
-    log['order'] = order
-    return log
-
 
 def update_splits(df):
     """Takes dataframe with length column, adds (or replaces) start, end"""
