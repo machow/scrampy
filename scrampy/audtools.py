@@ -1,3 +1,7 @@
+"""
+Utility functions for time formats, etc..
+"""
+
 def has_adjacent(indx):
     """Takes list of integers, returns True if any integers are adjacent in list."""
     for ii, current in enumerate(indx):

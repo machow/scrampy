@@ -97,11 +97,11 @@ def expand_data(df, dt=1, outname=None):
     cols = [col for col in df.columns if col != 'ms']
     max_index = df['end'].iloc[-1] / dt
     index = np.arange(max_index)
-    exp = DataFrame({'event_num': pd.np.nan, 'ms': index * dt}, index=index)
+    exp = DataFrame({'row_num': pd.np.nan, 'ms': index * dt}, index=index)
     for col in cols: exp[col] = pd.np.nan
     for ii, row in df.iterrows():
         indx = (row['start'] / dt <= exp.index) & (exp.index < row['end'] / dt)
-        exp['event_num'][indx] = ii
+        exp['row_num'][indx] = ii
         # copy over columns from df
         for col in cols: exp[col][indx] = row[col]
     if outname:

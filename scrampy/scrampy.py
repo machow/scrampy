@@ -1,3 +1,8 @@
+"""
+Main script for CLI. Contains high-level functions for rearranging audio and
+aligning blueprints.
+"""
+
 import argh
 import pandas as pd
 from pydub.audio_segment import AudioSegment

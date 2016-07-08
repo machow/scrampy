@@ -2,11 +2,18 @@ scrampy
 =======
 Scrambling audio like it aint nobody's business.
 
+
 Examples
 --------
 scrampy uses something called blueprints.
 See "How it Works" for all the juicy details on how these work.
-All examples are run from the shell (and untested on Windows :O).
+
+**Ipython Notebook Examples**
+
+- [create a blueprint for interleaved audio](examples/example_create_interl_bp.ipynb)
+- [generate audio from blueprint](examples/example_use_simple_bp.ipynb)
+
+All examples below may be run from the shell (and untested on Windows :O).
 
 ### Scrambline and Unscrambling
 
