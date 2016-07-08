@@ -1,5 +1,6 @@
 from pandas import DataFrame, Series
 from audtools import time2ms, calc_gap_length
+from argh import arg
 import pandas as pd
 
 OUTCOLS = ['name', 'start', 'end', 'length', 'order']
@@ -36,6 +37,21 @@ def parse_splits(fname_or_df, outname=None):
     
     return df.reindex_axis(OUTCOLS, axis=1)
 
+def parse_old_logs(log_file, order_file=None, name=None):
+    """Parse logs that have a single column of timepoints for each event"""
+    df = DataFrame.from_csv(log_file, index_col=None, header=None)
+    df = df.rename(columns={0:'break'})
+    if name: df['name'] = name
+    elif not 'name' in df: raise Exception('log needs a name column')
+
+    log = parse_splits(df)
+    if order_file:
+        order = Series.from_csv(order_file, header=None, index_col=None)
+        log['order'] = order
+    else:
+        log['order'] = range(len(log))
+
+    return log
 
 def update_splits(df):
     """Takes dataframe with length column, adds (or replaces) start, end"""
@@ -72,20 +88,24 @@ def aud_from_log(df, **kwargs):
 
 
 import numpy as np
+@arg('--dt', type=int, help='time delta to down/upsample to')
 def expand_data(df, dt=1, outname=None):
     """Takes data with events as rows and expands it to have a row for each time unit.
 
     """
+    print type(dt)
+    cols = [col for col in df.columns if col != 'ms']
     max_index = df['end'].iloc[-1] / dt
     index = np.arange(max_index)
-    exp = DataFrame({'name':pd.np.nan, 'order':pd.np.nan, 'ms': index * dt}, index=index)
+    exp = DataFrame({'event_num': pd.np.nan, 'ms': index * dt}, index=index)
+    for col in cols: exp[col] = pd.np.nan
     for ii, row in df.iterrows():
         indx = (row['start'] / dt <= exp.index) & (exp.index < row['end'] / dt)
-        exp['name'][indx] = row['name']
-        exp['order'][indx] = ii
-
+        exp['event_num'][indx] = ii
+        # copy over columns from df
+        for col in cols: exp[col][indx] = row[col]
     if outname:
-        df.to_csv(outname)
+        exp.to_csv(outname)
     return exp
 
 ##############################################################################

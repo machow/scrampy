@@ -5,17 +5,17 @@ setup(name='scrampy',
       description='split, mix, and combine audio',
       url='http://github.com/machow/scrampy',
       author='Michael Chow',
-      author_email='machow@princeton.edu',
+      author_email='chowmichedu@gmail.com',
       packages=['scrampy'],
       entry_points = {
           'console_scripts': ['scrampy=scrampy.scrampy:main']
           },
       install_requires=[
           'pydub',
-          'argh',
+          'argh >= 0.26.0',
           'PyYAML',
-          'pandas',
-          'numpy',
+          'pandas >= 0.16.0, < 0.17.0',
+          'numpy >= 1.8.0, < 1.9.0',
           ],
 
       zip_safe=False)

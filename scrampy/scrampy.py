@@ -42,9 +42,19 @@ def align(src, ref, outname='aligned.csv'):
     print bp
     bp.to_csv(outname)
     
+@arg('stories', nargs='*')
+def unscramble(bp, stories, suffix):
+    if type(bp) == str: bp = pd.read_csv(bp)
+    intact = bp.sort(['old_name', 'order'])
+    stories = {story : AudioSegment.from_file(story) for story in stories}
+    for ii, g in intact.groupby(['old_name']):
+        aud = aud_from_log(g, **stories)
+        try: ftype = suffix.split('.')[-1]
+        except IndexError: ftype = "wav"
+        aud.export(ii + suffix, ftype)
 
 parser = argh.ArghParser()
-parser.add_commands([parse_splits, insert_gaps, expand_data, align, make_audio])
+parser.add_commands([parse_splits, insert_gaps, expand_data, align, make_audio, unscramble])
 
 # Command Line ---------------------------------------------------------------
 def main(): parser.dispatch()
