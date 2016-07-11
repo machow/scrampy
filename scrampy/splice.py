@@ -101,9 +101,9 @@ def expand_data(df, dt=1, outname=None):
     for col in cols: exp[col] = pd.np.nan
     for ii, row in df.iterrows():
         indx = (row['start'] / dt <= exp.index) & (exp.index < row['end'] / dt)
-        exp['row_num'][indx] = ii
+        exp.loc[indx, 'row_num'] = ii
         # copy over columns from df
-        for col in cols: exp[col][indx] = row[col]
+        for col in cols: exp.loc[indx, col] = row[col]
     if outname:
         exp.to_csv(outname)
     return exp
